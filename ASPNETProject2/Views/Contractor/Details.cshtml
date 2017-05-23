@@ -1,0 +1,166 @@
+@model ASPNETProject2.Models.Contractor
+@*@inject ASPNETProject.Models.Review rev*@
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>@Html.DisplayFor(model => model.BusinessName) Details</h2>
+
+<hr />
+<div class="col-md-2" style="margin-bottom:20px; padding:0">
+    @if (Model.image != null)
+    {
+
+
+        Random Random = new Random();
+        int r = Random.Next();
+
+
+        <img src="~/images/users/@Model.image?r=@r"
+             alt="Contractor Image" style="height:150px; width:320px;" class="img-responsive" />
+    }
+    else if (Model.TradeID == 1)
+    {
+        <img src="~/images/searchcarp_360.png" alt="Carpenter" height="150">
+
+    }
+    else if (Model.TradeID == 2)
+    {
+        <img src="~/images/searchplumber_360.png" alt="Plumber" height="150">
+
+    }
+    else if (Model.TradeID == 3)
+    {
+        <img src="~/images/searchelect_360.png" alt="" height="150">
+
+
+    }
+    else if (Model.TradeID == 4)
+    {
+
+        <img src="~/images/searchhvac_360.png" alt="" height="150">
+
+    }
+    else if (Model.TradeID == 5) /*TODO FIND LANDSCAPING PICTURE*/
+    {
+        <img src="~/images/searchelect_360.png" alt="" height="150">
+
+    }
+    else /*TODO FIND DEFAULT PICTURE*/
+    {
+        <img src="~/images/searchplumber_360.png" alt="" height="150">
+
+    }
+
+</div>
+
+
+<div class="col-md-4" style="padding:0">
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName):
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FirstName):
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName):
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastName):
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email):
+        </dt>
+        <dd>
+            @Html.DisplayTextFor(model => model.Email)
+        </dd>
+        <dt>
+                @Html.DisplayNameFor(model => model.BusinessName):
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.BusinessName)
+            </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber):
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Trade.TradeType):
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Trade.TradeType)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.City):
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.City)
+        </dd>
+    </dl>
+</div>
+
+
+
+@*@foreach (var item in Model.Reviews)
+    {
+
+       <p>@item.message</p>
+
+    }*@
+
+<table class="table table-condensed table-bordered" style="table-layout:fixed; width:1100px">
+    <thead>
+        <tr class="info">
+            <th style="width:120px">Rating</th>
+            <th>Review</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Reviews)
+            {
+            <tr>
+                @*<td>@Html.DisplayFor(m => item.Rating)</td>*@
+
+                <td>
+                    @if (item.Rating == 0)
+                    {
+                        <img src="~/images/stars/0.JPG" style="height:20px" />
+                    }
+                    else if (item.Rating == 1)
+                    {
+                        <img src="~/images/stars/1.JPG" style="height:20px" />
+                    }
+                    else if (item.Rating == 2)
+                    {
+                        <img src="~/images/stars/2.JPG" style="height:20px" />
+                    }
+                    else if (item.Rating == 3)
+                    {
+                        <img src="~/images/stars/3.JPG" style="height:20px" />
+                    }
+                    else if (item.Rating == 4)
+                    {
+                        <img src="~/images/stars/4.JPG" style="height:20px" />
+                    }
+                    else
+                    {
+                        <img src="~/images/stars/5.JPG" style="height:20px" />
+                    }
+
+
+                </td>
+
+
+                <td style="word-wrap:break-word;">@Html.DisplayFor(m => item.message)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div style="clear:both;">
+    @*<a asp-action="Edit" asp-route-id="@Model.ContractorID">Edit</a> |*@
+    <a asp-action="Index" class="btn btn-default" style="margin-top:10px; margin-bottom:10px;">Back to List</a>
+</div>

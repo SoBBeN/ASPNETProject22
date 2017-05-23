@@ -42,6 +42,15 @@ namespace ASPNETProject2
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //================================= Added By Benoit Poirier================================================================//
+
+            //=============Rating services==============//
+            services.AddDbContext<RatingContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            //==================================End Benoit Porier======================================================================//
+
+
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

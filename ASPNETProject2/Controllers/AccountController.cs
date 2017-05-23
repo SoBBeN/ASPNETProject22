@@ -12,6 +12,9 @@ using Microsoft.Extensions.Options;
 using ASPNETProject2.Models;
 using ASPNETProject2.Models.AccountViewModels;
 using ASPNETProject2.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using ASPNETProject2.Data;
 
 namespace ASPNETProject2.Controllers
 {
@@ -24,6 +27,10 @@ namespace ASPNETProject2.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly string _externalCookieScheme;
+        private IHostingEnvironment _hostingEnv; //Bpoirier: for upload
+
+        //BPoirier: Create SchoolContext
+        private readonly RatingContext _context;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -31,7 +38,9 @@ namespace ASPNETProject2.Controllers
             IOptions<IdentityCookieOptions> identityCookieOptions,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            IHostingEnvironment env,
+            RatingContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -39,6 +48,8 @@ namespace ASPNETProject2.Controllers
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _hostingEnv = env; //Bpoirier: for upload
+            _context = context; //BPoirier: for database
         }
 
         //
@@ -107,15 +118,58 @@ namespace ASPNETProject2.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Register(RegisterViewModel model, 
+            IList<IFormFile> files, //BPoirier: added file upload
+            string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await _userManager.CreateAsync(user, model.Password);
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,//BPoirier Custom properties
+                    LastName = model.LastName,
+                    City = model.City,
+                    PhoneNumber = model.PhoneNumber
+                };
+                //create customer
+                var customer = new Customer
+                {
+                    Email = model.Email,
+                    FirstName = model.FirstName,//BPoirier Custom properties
+                    LastName = model.LastName,
+                    City = model.City,
+                    PhoneNumber = model.PhoneNumber
+                };
+
+                var result = await _userManager.CreateAsync(user, model.Password); //this creates the user
+                
                 if (result.Succeeded)
                 {
+                    _context.Add(customer);//Add customer inside customer Table if result Succeeded it should be good to go!!!
+                    await _context.SaveChangesAsync(); //save the database with new customer
+                    //============================ upload profile image =======================//
+                    foreach (var file in files)
+                    {
+                        //rename the file: 6847sdf456561sdf78.jpg
+                        var filename = user.Email + System.IO.Path.GetExtension(file.FileName); //this is the new fileName attached with user.id
+                                                                                                //tag on the path where we want to upload the image
+                                                                                                //filename = _hostingEnv.WebRootPath + $"\\images\\users\\{filename}"; //One way to do it
+                        filename = _hostingEnv.WebRootPath + $@"\images\users\{filename}";//this would create  \images\users\Benoitpoirier9@outlook.com.jpg
+
+                        using (System.IO.FileStream fs = System.IO.File.Create(filename))
+                        {
+                            file.CopyTo(fs);
+                            fs.Flush(); // clear the memory like java
+                        }
+                    }
+
+
+                    //============================ End file upload ============================//
+
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
                     // Send an email with this link
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

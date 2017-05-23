@@ -1,0 +1,456 @@
+@model IEnumerable<ASPNETProject2.Models.Contractor>
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@using System;
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!-- Page Content -->
+
+<div class="row" id="contractorIndex">
+    <div class="col-md-3">
+        <img src="~/images/Construction.gif" id="constructionGid" />
+        <p id="SearchByTrade_p" class="lead"><span class="glyphicon glyphicon-search"></span>&nbsp; Search by trade</p>
+        <form asp-action="Index" id="searchForm">
+
+            <div class="form-group">
+                @*<li><a asp-action="Index" asp-route-currentFilter=@ViewData["CurrentFilter"]> Carpenter</a></li>*@
+                <select class="form-control" input-sm
+                        asp-items="ViewBag.SelectedTrade"
+                        id="SelectedTrade" name="SelectedTrade"
+                        onchange="$(this).closest('form').submit();">
+
+                    <option value="">All</option>
+                    @*<option value="Carpenter">Carpenter</option>
+                        <option value="Plumber">Plumber</option>
+                        <option value="Heating and air conditioning">Heating and air conditioning</option>
+                        <option value="Landscaping">Landscaping</option>*@
+                </select>
+                @*@foreach (var item in Model.Trades)
+                    {
+                    <a asp-action="Index" class="list-group-item" asp-route-currentFilter=@ViewData["CurrentFilter"]> @Html.DisplayFor(modelItem => item.TradeType)</a>
+                    }*@
+
+                @*<h6>@Html.DisplayFor(modelItem => item.TradeType)</h6>*@
+            </div>
+        </form>
+
+
+
+
+
+
+
+
+
+
+        @*<a href="#" class="list-group-item">Category 1</a>
+            <a href="#" class="list-group-item">Category 2</a>
+            <a href="#" class="list-group-item">Category 3</a>*@
+
+    </div>
+    <div class="col-md-9">
+        <div class="row carousel-holder">
+            <div class="col-md-12">
+                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <img class="slide-image" src="~/images/searchcarousel01_720.jpg" alt="">
+                        </div>
+                        <div class="item">
+                            <img class="slide-image" src="~/images/searchcarousel02_720.jpg" alt="">
+                        </div>
+                        <div class="item">
+                            <img class="slide-image" src="~/images/searchcarousel03_720.jpg" alt="">
+                        </div>
+                    </div>
+                    <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                    </a>
+                    <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="row">
+
+            @*for foreach div*@
+
+           
+            @{ var counter = 0;}
+            @foreach (var item in Model)
+            {
+
+                <div class="col-sm-4 col-lg-4 col-md-4">
+                    <div class="thumbnail">
+                        @if (item.image != null)
+                        {
+
+
+                            Random Random = new Random();
+                            int r = Random.Next();
+
+
+                            <img src="~/images/users/@(item.image)?r=@r"
+                                 alt="Contractor Image" style="height:150px; width:320px;"  class="img-responsive"/>
+                        }
+
+                        else if (item.TradeID == 1)
+                        {
+                            <img src="~/images/Trade/carpenter.jpg" style="height:150px; width:320px;" alt="Carpenter Image"  class="img-responsive"/>
+
+                        }
+                        else if (item.TradeID == 2)
+                        {
+                            <img src="~/images/Trade/plumber.jpg" style="height:150px; width:320px;" alt="Plumber Image"  class="img-responsive"/>
+
+                        }
+                        else if (item.TradeID == 3)
+                        {
+                            <img src="~/images/Trade/electric.jpg" style="height:150px; width:320px;" alt="Electic Image" class="img-responsive"/>
+
+
+                        }
+                        else if (item.TradeID == 4)
+                        {
+
+                            <img src="~/images/Trade/hvac.jpg" style="height:150px; width:320px;" alt="Heating and ventilation Image"  class="img-responsive"/>
+
+                        }
+                        else if (item.TradeID == 5) /*TODO FIND LANDSCAPING PICTURE*/
+                        {
+                            <img src="~/images/Trade/lanscaping.jpg"  style="height:150px; width:320px;" alt="Landcaping Image"   class="img-responsive"/>
+
+                        }
+                        else if (item.TradeID == 6) /*TODO FIND Mechanic PICTURE*/
+                        {
+                            <img src="~/images/Trade/mechanic.jpg"  style="height:150px; width:320px;" alt="Mechanic Image"  class="img-responsive"/>
+
+                        }
+                        <div>
+                         <h4 style="text-align:center;  text-decoration: underline;"><a asp-controller="Contractor" asp-action="Details" asp-route-id="@item.ContractorID">@Html.DisplayFor(modelItem => item.BusinessName)</a></h4>
+                       </div>
+                        <div class="ratings" style="padding-left:0;">
+                            <p class="pull-right"><a asp-controller="Review" asp-action="Index" asp-route-id="@item.ContractorID">@item.ReviewCount Reviews</a></p>
+                            
+                            <p>
+                                
+                                @if (item.AverageRating >= 4.5)
+                                {
+                                    <img src="~/images/stars/5.JPG" style="width:150px;" class="img-responsive pull-left" /><br />
+                                    @*<span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>*@
+
+                                }
+                                else if (item.AverageRating >= 3.5)
+                                {
+                                    <img src="~/images/stars/4.JPG" style="width:150px;" class="img-responsive pull-left" /><br />
+                                    @*<span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>*@
+                                }
+                                else if (item.AverageRating >= 2.5)
+                                {
+                                    <img src="~/images/stars/3.JPG" style="width:150px;" class="img-responsive pull-left" /><br />
+                                    @*<span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>*@
+                                }
+                                else if (item.AverageRating >= 1.5)
+                                {
+                                    <img src="~/images/stars/2.JPG" style="width:150px;" class="img-responsive pull-left" /><br />
+                                    @*<span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>*@
+                                }
+                                else if (item.AverageRating >= 0.5)
+                                {
+
+                                    @*<span class="glyphicon glyphicon-star"></span>*@
+                                    <img src="~/images/stars/1.JPG" style="width:150px;" class="img-responsive pull-left" /><br />
+                                }
+                                else if (item.AverageRating < 0.5)
+                                {
+                                    @*<span class="glyphicon glyphicon-star-empty"></span>*@
+                                    <img src="~/images/stars/0.JPG" style="width:150px;" class="img-responsive pull-left" /><br />
+                                }
+                            </p>
+                            @{ 
+                                counter = counter + 1;
+                                string href = "collapseExample" + counter;
+                            }
+                            @*<h4 style="text-align:center">Contact Info</h4>*@
+                            <a class="btn btn-success" role="button" data-toggle="collapse" href="#@href" aria-expanded="false" aria-controls="collapseExample" style="margin-bottom:10px;">
+                                <i class="glyphicon glyphicon-collapse-down"></i>&nbsp;&nbsp; Contact Info
+                            </a>
+                            <div class="collapse" id="@href">
+                                <div class="well col-md-12" style="width: 359px;">
+                                    <div class="col-md-4" style="text-align:right">
+                                        <label>Name:</label><br />
+                                        <label>City:</label><br />
+                                        <label>Phone:</label><br />
+                                        <label>Email:</label><br />
+                                        <label>Trade:</label>
+                                    </div>
+                                    <div class="col-md-6" style="margin-left: 0px; text-align:left;">
+                                        <p style="margin-bottom: 5px;">@item.FirstName &nbsp; @item.LastName</p>
+                                        <p style="margin-bottom: 5px;">@item.City</p>
+                                        <p style="margin-bottom: 5px;">@item.PhoneNumber</p>
+                                        <p style="margin-bottom: 5px;">@item.Email</p>
+                                            @{
+
+
+                                                if (@item.TradeID == 1)
+                                                {
+                                                <p style="margin-bottom:5px;">Carpenter</p>
+                                                }
+                                                else if (@item.TradeID == 2)
+                                                {
+                                                    <p style="margin-bottom:5px;">Plumber</p>
+                                                }
+                                                else if (@item.TradeID == 3)
+                                                {
+                                                    <p style="margin-bottom:5px;">Electrician</p>
+                                                }
+                                                else if (@item.TradeID == 4)
+                                                {
+                                                    <p style="margin-bottom:5px;">Hvac</p>
+                                                }
+                                                else if (@item.TradeID == 5)
+                                                {
+                                                    <p style="margin-bottom:5px;">Landscaping</p>
+                                                }
+                                                else if (@item.TradeID == 6)
+                                                {
+                                                    <p style="margin-bottom:5px;">Mechanic</p>
+                                                }
+
+                                            }
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+                @*<div class="col-sm-4 col-lg-4 col-md-4">
+                    <div class="thumbnail">
+                        @if (item.TradeID == "1")
+                                        {
+                            <img src="~/images/searchcarp_360.png" alt="Carpenter" height="150">
+
+                        }
+                        else if (item.TradeID == "2")
+                        {
+                            <img src="~/images/searchplumber_360.png" alt="Plumber" height="150">
+
+                        }
+                        else if (item.TradeID == "3")
+                        {
+                            <img src="~/images/searchelect_360.png" alt="" height="150">
+
+
+                        }
+                        else if (item.TradeID == "4")
+                        {
+
+                            <img src="~/images/searchhvac_360.png" alt="" height="150">
+
+                        }
+                        else if (item.TradeID == "5") /*TODO FIND LANDSCAPING PICTURE*/
+                        {
+                            <img src="~/images/searchelect_360.png" alt="" height="150">
+
+                        }
+                        else /*TODO FIND DEFAULT PICTURE*/
+                        {
+                            <img src="~/images/searchplumber_360.png" alt="" height="150">
+
+                        }
+                        <div class="caption">
+                            <h4>
+                                <a asp-controller="Contractor" asp-action="Details" asp-route-id="@item.ContractorID">@Html.DisplayFor(modelItem => item.BusinessName)</a>
+                            </h4>
+                            <p>Contact Info goes Here!</p>
+                        </div>*@
+                @*@{
+                        var review = reviews.ContractorID;
+                    }*@
+
+
+
+
+
+                @*@inject IEnumerable<ASPNETProject.Models.Review> rev
+                    @foreach (var Review in rev)
+                                {
+
+
+                            <p>WORKS!!!!!!!!!</p>
+
+
+                    }*@
+
+                @*<div class="ratings">
+                                <p class="pull-right"><a>Reviews</a></p>
+                                <p>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>*@
+
+
+                @*<div class="col-sm-4 col-lg-4 col-md-4  thumbnail">
+                    <div class="col-md-6" style="padding-right:0;">
+
+
+
+                       @if (item.image != null)
+                                {
+
+
+                                    Random Random = new Random();
+                                    int r = Random.Next();
+
+
+                <img src="~/images/users/@(item.image)?r=@r"
+                     alt="Contractor Image"
+                      />
+                        }
+
+                        else if (item.TradeID == 1)
+                        {
+                            <img src="~/images/searchcarp_360.png" alt="Carpenter" height="200">
+
+                        }
+                        else if (item.TradeID == 2)
+                        {
+                            <img src="~/images/searchplumber_360.png" alt="Plumber" height="200">
+
+                        }
+                        else if (item.TradeID == 3)
+                        {
+                            <img src="~/images/searchelect_360.png" alt="" height="200">
+
+
+                        }
+                        else if (item.TradeID == 4)
+                        {
+
+                            <img src="~/images/searchhvac_360.png" alt="" height="200">
+
+                        }
+                        else if (item.TradeID == 5) /*TODO FIND LANDSCAPING PICTURE*/
+                        {
+                            <img src="~/images/searchelect_360.png" alt="" height="200">
+
+                        }
+                        else if (item.TradeID == 6) /*TODO FIND Mechanic PICTURE*/
+                        {
+                            <img src="~/images/searchelect_360.png" alt="" height="200">
+
+                        }
+                        else /*TODO FIND DEFAULT PICTURE*/
+                        {
+                            <img src="~/images/searchplumber_360.png" alt="" height="200">
+
+                        }
+                    </div>
+                    <div class="col-md-6 caption" style="height:200px;">
+                        <div class="row">
+                            <h4><a style="margin-left:15px;" asp-controller="Contractor" asp-action="Details" asp-route-id="@item.ContractorID">@Html.DisplayFor(modelItem => item.BusinessName)</a></h4>
+                        </div>
+                        <div class="row">
+                            <label style="margin-left:35px;">Contact Info</label>
+                        </div>
+
+                        <div class="col-md-6 caption" style="text-align:left; padding:0">
+
+                            <label>City:</label><br />
+                            <label>Phone:</label><br />
+                            <label>City:</label><br />
+                            <label>Trade:</label>
+                        </div>
+
+                        <div class="col-md-6 caption" style="padding:0;">
+                            <p style="margin-bottom:5px;">@item.City</p>
+                            <p style="margin-bottom:5px;">@item.PhoneNumber</p>
+                            <p style="margin-bottom:5px;">Address</p>
+                            @{
+
+
+                                if (@item.TradeID == 1)
+                                {
+                                    <p style="margin-bottom:5px;">Carpenter</p>
+                                }
+                                else if (@item.TradeID == 2)
+                                {
+                                    <p style="margin-bottom:5px;">Plumber</p>
+                                }
+                                else if (@item.TradeID == 3)
+                                {
+                                    <p style="margin-bottom:5px;">Electrician</p>
+                                }
+                                else if (@item.TradeID == 4)
+                                {
+                                    <p style="margin-bottom:5px;">Hvac</p>
+                                }
+                                else if (@item.TradeID == 5)
+                                {
+                                    <p style="margin-bottom:5px;">Landscaping</p>
+                                }
+                                else if (@item.TradeID == 6)
+                                {
+                                    <p style="margin-bottom:5px;">Mechanic</p>
+                                }
+
+                            }
+
+
+                        </div>
+                    </div>
+
+                </div>*@
+        } @*End foreach*@
+
+
+
+
+
+            @*END foreach div*@
+
+
+            @*<div class="col-sm-4 col-lg-4 col-md-4">
+                    <h4>
+                        <a href="#">Like this template?</a>
+                    </h4>
+                    <p>If you like this template, then check out <a target="_blank" href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">this tutorial</a> on how to build a working review system for your online store!</p>
+                    <a class="btn btn-primary" target="_blank" href="http://maxoffsky.com/code-blog/laravel-shop-tutorial-1-building-a-review-system/">View Tutorial</a>
+                </div>*@
+        </div>
+    </div>
+</div>

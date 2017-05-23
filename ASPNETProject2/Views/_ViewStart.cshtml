@@ -1,3 +1,26 @@
-﻿@{
-    Layout = "_Layout";
+﻿@* kbabin: Set up site stye.
+               Different layout for home page
+
+        @{
+        Layout = "_LayoutCarousel";
+    }*@
+
+@{
+    // Retrieve current controller
+    // Controller must be created before action
+    string controller = ViewContext.RouteData.Values["Controller"].ToString();
+
+    // Retrieve current action
+    string action = ViewContext.RouteData.Values["Action"].ToString();
+
+    // Check if user is on Home Controller and Index Action
+    if (controller == "Home" && action == "Index")
+    {
+        Layout = "_LayoutCarousel";
+    }
+    else
+    {
+        Layout = "_Layout";
+    }
+
 }

@@ -1,0 +1,80 @@
+@model IEnumerable<ASPNETProject2.Models.Review>
+
+@{
+    ViewData["Title"] = "Reviews";
+}
+
+<h2>Reviews</h2>
+
+@*<p>
+    <a asp-action="Create">Create New</a>
+</p>*@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Rating</th>
+            <th>
+                @Html.DisplayNameFor(model => model.message)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Contractor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Customer)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.Rating)*@
+
+                    @if (item.Rating == 0)
+                {
+                        <img src="~/images/stars/0.JPG" style="height:20px" />
+                    }
+                    else if (item.Rating == 1)
+                    {
+                        <img src="~/images/stars/1.JPG" style="height:20px" />
+
+                    }
+                    else if (item.Rating == 2)
+                    {
+                        <img src="~/images/stars/2.JPG" style="height:20px" />
+                    }
+                    else if (item.Rating == 3)
+                    {
+                        <img src="~/images/stars/3.JPG" style="height:20px" />
+                    }
+                    else if (item.Rating == 4)
+                    {
+                        <img src="~/images/stars/4.JPG" style="height:20px" />
+                    }
+                    else
+                    {
+                        <img src="~/images/stars/5.JPG" style="height:20px" />
+                    }
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.message)
+                </td>
+                <td>
+                    <p><a asp-controller="Contractor" asp-action="Details" asp-route-id="@item.ContractorID">@Html.DisplayFor(modelItem => item.Contractor.BusinessName)</a></p>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Customer.Email)
+                </td>
+
+                @*<td>
+                    <a asp-action="Edit" asp-route-id="@item.ReviewID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ReviewID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ReviewID">Delete</a>
+                </td>*@
+            </tr>
+        }
+    </tbody>
+</table>

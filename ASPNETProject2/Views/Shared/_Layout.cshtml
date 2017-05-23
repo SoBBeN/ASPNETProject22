@@ -1,4 +1,6 @@
 ﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +11,8 @@
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/rating.css" />
+        <link href="~/css/shop-homepage.css" rel="stylesheet" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -28,11 +32,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">ASPNETProject2</a>
+                @*<a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">ASPNETProject2</a>*@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">HOME</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 </ul>
@@ -40,13 +44,73 @@
             </div>
         </div>
     </nav>
-    <div class="container body-content">
+    <div class="container main">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2017 - ASPNETProject2</p>
-        </footer>
     </div>
+        <footer id="footer" style="margin-bottom:0;">
+            @*layout-footer*@
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="widget">
+                        <h5>ASPNET Project</h5>
+                        <p>
+                            <i class="icon-phone"></i> (506) 858-9696 <br>
+                            <i class="icon-envelope-alt"></i> email@domainname.com
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="widget">
+                        <h5>Quick Links</h5>
+                        <ul class="link-list">
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <li><a asp-controller="review" asp-action="Index">Recent Reviews</a></li>
+                                    <li><a asp-controller="Home" asp-action="About">About</a></li>
+                            }
+                            else
+                            {
+                                <li><a asp-controller="Account" asp-action="Register_Customer">Register</a></li>
+                                    <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+
+                            }
+
+                            <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="widget">
+                        <h5>Recent News</h5>
+                        <ul class="link-list">
+                            <li>
+                                Register now to find the contractor that's right for you! <br>
+                                You can view reviews from previous customers and enter your own reviews of contractor's you've hired.
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="sub-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="copyright">
+                            <p>
+                                <span>&copy; @DateTime.Now.Year Benoit &amp; Kaitie</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
