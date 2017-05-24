@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ASPNETProject2.Data;
 using ASPNETProject2.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASPNETProject2.Controllers
 {
@@ -23,6 +24,7 @@ namespace ASPNETProject2.Controllers
         }
 
         // GET: Review
+        [Authorize]
         public async Task<IActionResult> Index(int? id)
         {
             if (id != null)
@@ -35,6 +37,7 @@ namespace ASPNETProject2.Controllers
         }
 
         // GET: Review/Details/5
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -55,6 +58,7 @@ namespace ASPNETProject2.Controllers
         }
 
         // GET: Review/Create
+        [Authorize]
         public async Task<IActionResult> Create()
         {
             //Get user thats loged in
@@ -90,6 +94,7 @@ namespace ASPNETProject2.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create(/*[Bind("ContractorID,CustomerID,Rating,message")]*/ Review review)
         {
             //    UPDATE Customers
@@ -150,6 +155,7 @@ namespace ASPNETProject2.Controllers
         }
 
         // GET: Review/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -172,6 +178,7 @@ namespace ASPNETProject2.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("ReviewID,ContractorID,CustomerID,Rating,message")] Review review)
         {
             if (id != review.ReviewID)

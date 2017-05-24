@@ -9,6 +9,7 @@ using ASPNETProject2.Data;
 using ASPNETProject2.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASPNETProject2.Controllers
 {
@@ -24,6 +25,7 @@ namespace ASPNETProject2.Controllers
         }
 
         // GET: Contractor
+        [Authorize]
         public async Task<IActionResult> Index(int? SelectedTrade)
         {
             //get trade drop down from our method
@@ -107,6 +109,7 @@ namespace ASPNETProject2.Controllers
 
 
         // GET: Contractor/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -126,6 +129,7 @@ namespace ASPNETProject2.Controllers
         }
 
         // GET: Contractor/Create
+        [Authorize]
         public IActionResult Create()
         {
             ViewData["TradeID"] = new SelectList(_context.Trades, "TradeID", "TradeType");
@@ -154,6 +158,7 @@ namespace ASPNETProject2.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create(Contractor model, IList<IFormFile> files) //BPoirier: added file upload
         {
 

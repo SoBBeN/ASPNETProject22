@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="wwwroot\favicon.ico" />
     <Content Include="wwwroot\images\Trade\carpenter.jpg" />
     <Content Include="wwwroot\images\Trade\electric.jpg" />
     <Content Include="wwwroot\images\Trade\hvac.jpg" />
