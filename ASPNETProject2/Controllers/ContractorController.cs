@@ -161,7 +161,7 @@ namespace ASPNETProject2.Controllers
         [Authorize]
         public async Task<IActionResult> Create(Contractor model, IList<IFormFile> files) //BPoirier: added file upload
         {
-
+            
             var filename = "";
             if (ModelState.IsValid)
             {
@@ -224,7 +224,7 @@ namespace ASPNETProject2.Controllers
                 var starTotal = contractor.ReviewStarTotal;
                 var AverageRating = contractor.AverageRating;
                 var logo = "";
-                if (model.image == null)
+                if (files == null)
                 {
                     logo = "imageNotFound" + ".jpg";
                 }
