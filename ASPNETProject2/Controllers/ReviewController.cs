@@ -37,7 +37,7 @@ namespace ASPNETProject2.Controllers
         }
 
         // GET: Review/Details/5
-
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -212,6 +212,7 @@ namespace ASPNETProject2.Controllers
         }
 
         // GET: Review/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -232,6 +233,7 @@ namespace ASPNETProject2.Controllers
         }
 
         // POST: Review/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
