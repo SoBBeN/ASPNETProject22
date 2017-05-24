@@ -204,7 +204,7 @@ namespace ASPNETProject2.Controllers
                     //image = filename
 
                 };
-           
+
             
                 _context.Add(contractor);
                                          
@@ -214,7 +214,6 @@ namespace ASPNETProject2.Controllers
                 //variable to hold values
                 var contractorid = contractor.ContractorID;
                 var businessName = contractor.BusinessName;
-
                 var city = contractor.City;
                 var email = contractor.Email;
                 var firstName = contractor.FirstName;
@@ -224,8 +223,17 @@ namespace ASPNETProject2.Controllers
                 var reviewCount = contractor.ReviewCount;
                 var starTotal = contractor.ReviewStarTotal;
                 var AverageRating = contractor.AverageRating;
-                //var logo = contractor.Email + ".jpg";
-                var logo = contractor.FirstName + "_" + contractor.LastName + ".jpg";
+                var logo = "";
+                if (model.image == null)
+                {
+                    logo = "imageNotFound" + ".jpg";
+                }
+                else
+                {
+                    //var logo = contractor.Email + ".jpg";
+                     logo = contractor.FirstName + "_" + contractor.LastName + ".jpg";
+                }
+
 
 
                 //query the database

@@ -18,6 +18,7 @@ namespace ASPNETProject2.Models
         public string LastName { get; set; }
 
         //Email
+        [Required]
         [EmailAddress]
         public string Email { get; set; }
 
@@ -44,6 +45,8 @@ namespace ASPNETProject2.Models
         public string City { get; set; }
 
         //Image
+        //[Required]
+        //[StringLength(60, ErrorMessage = "Image Require", MinimumLength =1)]
         public string image { get; set; }
 
         //Review Count
